@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "de.symptromtracker.backend.spring",
+      "nativeLanguage": "de"
+    },
+    "jhipsterVersion": "6.8.0",
+    "applicationType": "microservice",
+    "baseName": "symptromtrackerbackendspring",
+    "packageName": "de.symptromtracker.backend.spring",
+    "packageFolder": "de/symptromtracker/backend/spring",
+    "serverPort": "8081",
+    "authenticationType": "oauth2",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "NzA3ODRlYmMzYzljNWEzMWY1MzA4NmNkOTVkYjUwN2FmNjg3YjI3ODExY2Y5NGYxMDI1ZTIwNDJiODU3YmQwMzE5MWExMDc4ZGRkZDE5ZGY1N2FhNTRkMmM4MWUwYjQ4N2RhNGZhYTZhN2NlYzYwNGFiOWZhNTVlMzA0OGQwYjE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1585391326276,
+    "testFrameworks": ["gatling"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "de",
+    "languages": ["de", "en"],
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
