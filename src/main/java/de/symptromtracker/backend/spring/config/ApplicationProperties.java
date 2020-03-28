@@ -3,7 +3,7 @@ package de.symptromtracker.backend.spring.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Properties specific to Symptromtrackerbackendspring.
+ * Properties specific to Symptomtrackerbackendspring.
  * <p>
  * Properties are configured in the {@code application.yml} file.
  * See {@link io.github.jhipster.config.JHipsterProperties} for a good example.

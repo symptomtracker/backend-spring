@@ -1,6 +1,6 @@
 version: '2'
 services:
-  symptromtrackerbackendspring-sonar:
+  symptomtrackerbackendspring-sonar:
     image: sonarqube:8.2-community
     ports:
       - 9001:9000

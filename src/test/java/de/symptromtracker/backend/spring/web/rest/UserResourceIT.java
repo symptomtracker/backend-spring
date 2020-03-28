@@ -1,6 +1,6 @@
 package de.symptromtracker.backend.spring.web.rest;
 
-import de.symptromtracker.backend.spring.SymptromtrackerbackendspringApp;
+import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import de.symptromtracker.backend.spring.domain.Authority;
 import de.symptromtracker.backend.spring.domain.User;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-@SpringBootTest(classes = {SymptromtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 public class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
@@ -136,6 +136,18 @@ public class UserResourceIT {
     public void getNonExistingUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/unknown"))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void getAllAuthorities() throws Exception {
+        restUserMockMvc.perform(get("/api/users/authorities")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
 
     @Test

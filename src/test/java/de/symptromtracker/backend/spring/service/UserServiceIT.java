@@ -1,6 +1,6 @@
 package de.symptromtracker.backend.spring.service;
 
-import de.symptromtracker.backend.spring.SymptromtrackerbackendspringApp;
+import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.Constants;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import de.symptromtracker.backend.spring.domain.User;
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for {@link UserService}.
  */
-@SpringBootTest(classes = {SymptromtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class UserServiceIT {
 

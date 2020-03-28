@@ -1,6 +1,6 @@
 package de.symptromtracker.backend.spring.repository;
 
-import de.symptromtracker.backend.spring.SymptromtrackerbackendspringApp;
+import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 
 import de.symptromtracker.backend.spring.config.Constants;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
@@ -29,7 +29,7 @@ import static de.symptromtracker.backend.spring.repository.CustomAuditEventRepos
 /**
  * Integration tests for {@link CustomAuditEventRepository}.
  */
-@SpringBootTest(classes = {SymptromtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class CustomAuditEventRepositoryIT {
 

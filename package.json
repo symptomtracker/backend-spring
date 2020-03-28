@@ -1,7 +1,7 @@
 {
-  "name": "symptromtrackerbackendspring",
+  "name": "symptomtrackerbackendspring",
   "version": "0.0.0",
-  "description": "Description for symptromtrackerbackendspring",
+  "description": "Description for symptomtrackerbackendspring",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

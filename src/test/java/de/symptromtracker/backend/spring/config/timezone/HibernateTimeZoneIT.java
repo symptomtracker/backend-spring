@@ -1,6 +1,6 @@
 package de.symptromtracker.backend.spring.config.timezone;
 
-import de.symptromtracker.backend.spring.SymptromtrackerbackendspringApp;
+import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import de.symptromtracker.backend.spring.repository.timezone.DateTimeWrapper;
 import de.symptromtracker.backend.spring.repository.timezone.DateTimeWrapperRepository;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for the UTC Hibernate configuration.
  */
-@SpringBootTest(classes = {SymptromtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 public class HibernateTimeZoneIT {
 
     @Autowired

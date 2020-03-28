@@ -1,6 +1,6 @@
 package de.symptromtracker.backend.spring.web.rest;
 
-import de.symptromtracker.backend.spring.SymptromtrackerbackendspringApp;
+import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import io.github.jhipster.config.JHipsterProperties;
 import de.symptromtracker.backend.spring.config.audit.AuditEventConverter;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-@SpringBootTest(classes = {SymptromtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class AuditResourceIT {
 

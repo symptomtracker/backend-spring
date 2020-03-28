@@ -14,14 +14,41 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-feign:
-  hystrix:
+eureka:
+  client:
     enabled: true
-  # client:
-  #     config:
-  #         default:
-  #             connectTimeout: 5000
-  #             readTimeout: 5000
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+  instance:
+    appname: symptomtrackerbackendspring
+    instanceId: symptomtrackerbackendspring:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+ribbon:
+  eureka:
+    enabled: true
+# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
+zuul: # those values must be configured depending on the application specific needs
+  sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
+  host:
+    max-total-connections: 1000
+    max-per-route-connections: 100
+  prefix: /services
+  semaphore:
+    max-semaphores: 500
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
@@ -29,11 +56,8 @@ hystrix:
     default:
       execution:
         isolation:
-          strategy: SEMAPHORE
-          # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-          # thread:
-          #     timeoutInMilliseconds: 10000
-  shareSecurityContext: true
+          thread:
+            timeoutInMilliseconds: 10000
 
 management:
   endpoints:
@@ -80,12 +104,7 @@ management:
 
 spring:
   application:
-    name: symptromtrackerbackendspring
-  profiles:
-    # The commented value for `active` can be replaced with valid Spring profiles to load.
-    # Otherwise, it will be filled in by maven when building the JAR file
-    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-    active: #spring.profiles.active#
+    name: symptomtrackerbackendspring
   jmx:
     enabled: false
   data:
@@ -121,13 +140,13 @@ spring:
       enabled: false
   task:
     execution:
-      thread-name-prefix: symptromtrackerbackendspring-task-
+      thread-name-prefix: symptomtrackerbackendspring-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: symptromtrackerbackendspring-scheduling-
+      thread-name-prefix: symptomtrackerbackendspring-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -143,8 +162,8 @@ spring:
             issuer-uri: http://localhost:9080/auth/realms/jhipster
         registration:
           oidc:
-            client-id: internal
-            client-secret: internal
+            client-id: web_app
+            client-secret: web_app
 
 server:
   servlet:
@@ -165,7 +184,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'symptromtrackerbackendspringApp'
+    name: 'symptomtrackerbackendspringApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -175,11 +194,11 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: symptromtrackerbackendspring@localhost
+    from: symptomtrackerbackendspring@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: symptromtrackerbackendspring API
-    description: symptromtrackerbackendspring API documentation
+    title: symptomtrackerbackendspring API
+    description: symptomtrackerbackendspring API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
