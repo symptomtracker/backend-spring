@@ -9,7 +9,248 @@ servers:
     description: Development server
   - url: https://localhost:8081/api
     description: Development server with TLS Profile
-paths: {}
+paths:
+  /patient:
+    get:
+      tags:
+        - patient
+      summary: Get a filtered list of patients
+      operationId: queryPatients
+      parameters:
+        - name: highRisk
+          in: query
+          description: whether the Patient is at Risk
+          required: false
+          schema:
+            type: boolean
+        - name: inactive
+          in: query
+          description: whether the Patient has been inactive for more than x hours
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: minAge
+          in: query
+          description: minimum age of patients
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: maxAge
+          in: query
+          description: maximum age of patients
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientModel"
+      x-swagger-router-controller: Patient
+    post:
+      tags:
+        - patient
+      summary: Create new patient
+      operationId: addNewPatient
+      parameters:
+        - name: invitationCode
+          in: query
+          description: Invitation Code of the Health Department
+          required: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientCreateRequest"
+        description: Describing the new patient
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientModel"
+      x-swagger-router-controller: Patient
+  "/patient/{_id}":
+    get:
+      tags:
+        - patient
+      summary: Get a corresponding patient
+      operationId: getPatient
+      parameters:
+        - name: _id
+          in: path
+          description: Id of the Patient
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientModel"
+      x-swagger-router-controller: Patient
+    patch:
+      tags:
+        - patient
+      summary: Patch a current Patient
+      operationId: patchPatient
+      parameters:
+        - name: _id
+          in: path
+          description: Id of the Patient
+          required: true
+          schema:
+            type: string
+            format: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientModel"
+        description: Representation of the current patient
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientModel"
+      x-swagger-router-controller: Patient
+  "/patient/{_id}/symptom":
+    get:
+      tags:
+        - symptoms
+      summary: Get Symptoms
+      operationId: getAllSymptoms
+      parameters:
+        - name: _id
+          in: path
+          description: ID patient
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SymptomJourneyModel"
+      x-swagger-router-controller: Symptoms
+    put:
+      tags:
+        - symptoms
+      summary: Add a new
+      operationId: addNewSymptoms
+      parameters:
+        - name: _id
+          in: path
+          description: ID patient
+          required: true
+          schema:
+            type: string
+            format: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/SymptomJourneyModel"
+        description: Representation of the current patient
+        required: true
+      responses:
+        "204":
+          description: Happy case - no content
+      x-swagger-router-controller: Symptoms
+  /catalogue:
+    get:
+      tags:
+        - questionaire
+      summary: get catalogue questsions
+      operationId: getCatalogueItems
+      responses:
+        "200":
+          description: returns array of symptom catalogue items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SymptomCatalogueItem"
+      x-swagger-router-controller: Questionaire
+    put:
+      tags:
+        - questionaire
+      summary: Add a new catalogue questsion
+      operationId: putCatalogueQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/SymptomCatalogueItem"
+        description: Representation of the current patient
+        required: true
+      responses:
+        "200":
+          description: returns array of symptom catalogue items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SymptomCatalogueItem"
+      x-swagger-router-controller: Questionaire
+  /report:
+    get:
+      tags:
+        - report
+      summary: generate report
+      operationId: getReport
+      responses:
+        "200":
+          description: Response
+      x-swagger-router-controller: Report
+  /messagePatients:
+    post:
+      tags:
+        - message
+      summary: send email to list of patients specified by list of id
+      operationId: messagePatients
+      parameters:
+        - name: _ids
+          in: query
+          description: list of patient ids
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        "204":
+          description: sending has been successful
+      x-swagger-router-controller: Message
 components:
   responses:
     Problem:
@@ -18,6 +259,176 @@ components:
         'application/problem+json':
           schema:
             $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+  schemas:
+    PatientCreateRequest:
+      type: object
+      required:
+        - age
+        - city
+        - gender
+        - name
+      properties:
+        name:
+          type: string
+          format: string
+        age:
+          type: integer
+          format: int64
+        gender:
+          type: string
+          format: string
+        city:
+          type: string
+          format: string
+      example:
+        gender: gender
+        city: city
+        name: name
+        age: 0
+    PatientModel:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: string
+        linkedCode:
+          type: string
+          format: string
+        name:
+          type: string
+          format: string
+        age:
+          type: integer
+          format: int64
+        gender:
+          type: string
+          format: string
+        city:
+          type: string
+          format: string
+        geo_risk:
+          type: boolean
+        contact_risk:
+          type: boolean
+        contact_date:
+          type: string
+          format: date-time
+        work:
+          type: string
+        smoker:
+          type: boolean
+        preexisting_conditions:
+          type: array
+          items:
+            type: string
+        immunal_suppressors:
+          type: boolean
+        pregnant:
+          type: boolean
+        relatedAttributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedAttribute"
+        symptomJourney:
+          type: array
+          items:
+            $ref: "#/components/schemas/SymptomJourneyModel"
+      example:
+        linkedCode: linkedCode
+        gender: gender
+        relatedAttributes:
+          - "@Type": "@Type"
+            "@Value": "@Value"
+          - "@Type": "@Type"
+            "@Value": "@Value"
+        city: city
+        symptomJourney:
+          - description: description
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            "@Category": "@Category"
+            comment: comment
+            symptomSeverity: symptomSeverity
+          - description: description
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            "@Category": "@Category"
+            comment: comment
+            symptomSeverity: symptomSeverity
+        name: name
+        id: 0
+        age: 6
+    RelatedAttribute:
+      type: object
+      properties:
+        "@Type":
+          type: string
+          format: string
+        "@Value":
+          type: string
+          format: string
+      example:
+        "@Type": "@Type"
+        "@Value": "@Value"
+    SymptomJourneyModel:
+      type: object
+      required:
+        - "@Category"
+        - symptomSeverity
+      properties:
+        "@Category":
+          type: string
+          format: string
+        description:
+          type: string
+          format: string
+        symptomSeverity:
+          type: string
+          format: string
+        comment:
+          type: string
+          format: string
+        createdAt:
+          type: string
+          format: date-time
+      example:
+        description: description
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        "@Category": "@Category"
+        comment: comment
+        symptomSeverity: symptomSeverity
+    SymptomCatalogueItem:
+      type: object
+      required:
+        - "@Category"
+        - symptomSeverity
+        - description
+        - toolTip
+        - toolTipLink
+      properties:
+        "@Category":
+          type: string
+          format: string
+        description:
+          type: string
+          format: string
+        toolTip:
+          type: string
+          format: string
+        toolTipLink:
+          type: string
+          format: string
+        symptomSeverity:
+          type: array
+          items:
+            type: string
+      example:
+        "@Category": "@Category"
+        description: description
+        toolTip: toolTip
+        toolTipLink: toolTipLink
+        symptomSeverity:
+          - symptomSeverity
+          - symptomSeverity
+
 
   securitySchemes:
     oauth:
