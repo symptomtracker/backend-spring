@@ -53,6 +53,15 @@
             </column>
         </createTable>
 
+        <createTable tableName="st_catalogue">
+            <column name="id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
@@ -66,6 +75,14 @@
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
+
+        <loadData
+            file="config/liquibase/data/catalogueitem.csv"
+            separator=";"
+            tableName="st_catalogue">
+            <column name="id" type="string"/>
+            <column name="description" type="string"/>
+        </loadData>
 
         <loadData
                   file="config/liquibase/data/user.csv"
