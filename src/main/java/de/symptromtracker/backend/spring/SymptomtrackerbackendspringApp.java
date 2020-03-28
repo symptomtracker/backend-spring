@@ -27,7 +27,6 @@ import java.util.Collection;
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
-@ComponentScan("de.symptromtracker.backend.spring.web.api.model.PatientModel")
 public class SymptomtrackerbackendspringApp {
 
     private static final Logger log = LoggerFactory.getLogger(SymptomtrackerbackendspringApp.class);
