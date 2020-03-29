@@ -4,10 +4,15 @@ import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.Constants;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import de.symptromtracker.backend.spring.domain.User;
+import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItem;
+import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItemCategory;
+import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItemSeverity;
 import de.symptromtracker.backend.spring.repository.UserRepository;
 import de.symptromtracker.backend.spring.security.AuthoritiesConstants;
 import de.symptromtracker.backend.spring.service.dto.UserDTO;
 
+import de.symptromtracker.backend.spring.service.mapper.CatalogueMapper;
+import de.symptromtracker.backend.spring.web.api.model.SymptomCatalogueItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +26,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -170,5 +173,53 @@ public class UserServiceIT {
         OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 
         return new OAuth2AuthenticationToken(user, authorities, "oidc");
+    }
+
+    @SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
+    @Transactional
+    public static class CatalogueServiceIT {
+
+        @Autowired
+        private CatalogueMapper catalogueMapper;
+
+        private CatalogueItem catalogueItem;
+        private CatalogueItemCategory catalogueItemCategory;
+        List<CatalogueItemSeverity> severityList;
+
+        @BeforeEach
+        public void init() {
+            initCatalogueItem();
+            initCatalogueItemCategory();
+            initSeverityList();
+        }
+
+        private void initCatalogueItem() {
+            catalogueItem = new CatalogueItem();
+            catalogueItem.setDescription("Haben Sie Husten?");
+            catalogueItem.setToolTip("Husten ist nicht gut");
+            catalogueItem.setToolTipLink("www.symptomtracker.de");
+        }
+
+        private void initCatalogueItemCategory() {
+            catalogueItemCategory = new CatalogueItemCategory();
+            catalogueItemCategory.setCatalogueItemCategory("LUNGE");
+            catalogueItem.setCatalogueItemCategory(catalogueItemCategory);
+        }
+
+        private void initSeverityList() {
+            severityList = new ArrayList<>();
+            severityList.add(new CatalogueItemSeverity(catalogueItem, 0, "Keine Symptome"));
+            severityList.add(new CatalogueItemSeverity(catalogueItem, 1, "Leichte Symptome"));
+            severityList.add(new CatalogueItemSeverity(catalogueItem, 2, "Mittel Symptome"));
+            severityList.add(new CatalogueItemSeverity(catalogueItem, 3, "Schwere Symptome"));
+            catalogueItem.setSymptomSeverity(severityList);
+        }
+
+        @Test
+        public void checkMapping() {
+            SymptomCatalogueItem symptomCatalogueItem = catalogueMapper.getSymptomCatalogueItemFromCatalogueItem(catalogueItem);
+            assertThat(symptomCatalogueItem.getDescription()).isEqualTo(catalogueItem.getDescription());
+            assertThat(symptomCatalogueItem.getSymptomSeverity().size()).isEqualTo(4);
+        }
     }
 }
