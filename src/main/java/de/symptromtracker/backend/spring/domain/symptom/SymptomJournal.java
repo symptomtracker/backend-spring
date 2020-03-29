@@ -11,13 +11,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "st_symptom_journal")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SymptomJournal {
     @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true,cascade=CascadeType.MERGE)
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
