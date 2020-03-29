@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <property name="autoIncrement" value="true"/>
+    <property name="autoIncrement" value="true"/>
 
     <!--
         JHipster core tables.
@@ -27,7 +27,7 @@
             </column>
             <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="lang_key" type="varchar(10)"/>
             <column name="created_by" type="varchar(50)">
@@ -57,10 +57,61 @@
             <column name="id" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
+            <column name="category_id" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
             <column name="description" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="tool_tip" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tool_tip_link" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <loadData
+            file="config/liquibase/data/catalogueitem.csv"
+            separator=";"
+            tableName="st_catalogue">
+            <column name="id" type="string"/>
+            <column name="category_id" type="string"/>
+            <column name="description" type="string"/>
+        </loadData>
+
+        <createTable tableName="st_catalogue_item_category">
+            <column name="id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadData
+            file="config/liquibase/data/catalogueitemcategory.csv"
+            separator=";"
+            tableName="st_catalogue_item_category">
+            <column name="id" type="string"/>
+        </loadData>
+
+        <createTable tableName="st_catalogue_item_severity">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="st_catalogue_item_severityPK"/>
+            </column>
+            <column name="severity_description" type="VARCHAR(255)"/>
+            <column name="severity" type="INT"/>
+            <column name="catalogue_item_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+            file="config/liquibase/data/catalogueitemseverity.csv"
+            separator=";"
+            tableName="st_catalogue_item_severity">
+            <column name="id" type="string"/>
+            <column name="catalogue_item_id" type="string"/>
+            <column name="severity" type="NUMERIC"/>
+            <column name="severity_description" type="string"/>
+        </loadData>
 
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
@@ -76,33 +127,26 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <loadData
-            file="config/liquibase/data/catalogueitem.csv"
-            separator=";"
-            tableName="st_catalogue">
-            <column name="id" type="string"/>
-            <column name="description" type="string"/>
-        </loadData>
 
         <loadData
-                  file="config/liquibase/data/user.csv"
-                  separator=";"
-                  tableName="jhi_user">
+            file="config/liquibase/data/user.csv"
+            separator=";"
+            tableName="jhi_user">
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
         <loadData
-                  file="config/liquibase/data/authority.csv"
-                  separator=";"
-                  tableName="jhi_authority">
+            file="config/liquibase/data/authority.csv"
+            separator=";"
+            tableName="jhi_authority">
             <column name="name" type="string"/>
         </loadData>
 
         <loadData
-                  file="config/liquibase/data/user_authority.csv"
-                  separator=";"
-                  tableName="jhi_user_authority">
+            file="config/liquibase/data/user_authority.csv"
+            separator=";"
+            tableName="jhi_user_authority">
             <column name="user_id" type="numeric"/>
         </loadData>
         <createTable tableName="jhi_persistent_audit_event">
@@ -110,7 +154,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="event_date" type="timestamp"/>
             <column name="event_type" type="varchar(255)"/>

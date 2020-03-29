@@ -1,37 +1,34 @@
 package de.symptromtracker.backend.spring.domain.catalogue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
 @Table(name = "st_catalogue")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CatalogueItem {
     @Id
     @Column(name = "id")
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
-    // @OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "st_catalogue_item_category_id", referencedColumnName = "id")
-    //private CatalogueItemCategory catalogueItemCategory;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private CatalogueItemCategory catalogueItemCategory;
+
     @Column(name = "description")
     private String description;
-    //private String toolTip;
-    //private String toolTipLink;
-    //private List<CatalogueItemSeverity> symptomSeverity = new ArrayList<>();
 
+    @Column(name = "tool_tip")
+    private String toolTip;
 
-    public CatalogueItem(String id, String description) {
-        this.id = id;
-        this.description = description;
-    }
+    @Column(name = "tool_tip_link")
+    private String toolTipLink;
+
+    @OneToMany(mappedBy = "catalogueItem")
+    private List<CatalogueItemSeverity> symptomSeverity;
+
 
     public CatalogueItem() {
     }
@@ -40,16 +37,24 @@ public class CatalogueItem {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CatalogueItemCategory getCatalogueItemCategory() {
+        return catalogueItemCategory;
+    }
+
+    public void setCatalogueItemCategory(CatalogueItemCategory catalogueItemCategory) {
+        this.catalogueItemCategory = catalogueItemCategory;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

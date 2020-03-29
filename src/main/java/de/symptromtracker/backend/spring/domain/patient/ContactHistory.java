@@ -9,7 +9,6 @@
 //
 //public class ContactHistory {
 //    private String id;
-//    private Patient patient;
 //    private OffsetDateTime contactDate;
 //    private String contactMethod;
 //    private String contactNote;

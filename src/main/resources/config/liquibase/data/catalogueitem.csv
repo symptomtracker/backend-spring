@@ -1,2 +1,2 @@
-id;description
-1;HELLO_SYMPTOM
+id;category_id;description;tool_tip;tool_tip_link
+1;LUNGE;HELLO_SYMPTOM;Hallo Welt;www.symptomtracker.de
