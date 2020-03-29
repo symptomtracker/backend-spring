@@ -113,6 +113,93 @@
             <column name="severity_description" type="string"/>
         </loadData>
 
+        <createTable tableName="st_patient">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="st_patientPK"/>
+            </column>
+            <column name="age" type="BIGINT"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="gender" type="VARCHAR(255)"/>
+            <column name="infected" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lang_key" type="VARCHAR(10)"/>
+            <column name="linked_code" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+        <loadData
+            file="config/liquibase/data/patient.csv"
+            separator=";"
+            tableName="st_patient">
+            <column name="id" type="string"/>
+            <column name="age" type="NUMERIC"/>
+            <column name="city" type="string"/>
+            <column name="email" type="string"/>
+            <column name="gender" type="string"/>
+            <column name="infected" type="BOOLEAN"/>
+            <column name="lang_key" type="string"/>
+            <column name="linked_code" type="string"/>
+            <column name="name" type="string"/>
+        </loadData>
+
+        <createTable tableName="st_related_attribute">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="st_related_attributePK"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="patient_id" type="VARCHAR(255)"/>
+            <column name="category_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+            file="config/liquibase/data/relatedattribute.csv"
+            separator=";"
+            tableName="st_related_attribute">
+            <column name="id" type="string"/>
+            <column name="category_id" type="string"/>
+            <column name="patient_id" type="string"/>
+            <column name="value" type="string"/>
+        </loadData>
+
+
+        <createTable tableName="st_related_attribute_category">
+            <column name="id" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="st_related_attribute_categoryPK"/>
+            </column>
+        </createTable>
+
+        <loadData
+            file="config/liquibase/data/relatedattributecategory.csv"
+            separator=";"
+            tableName="st_related_attribute_category">
+            <column name="id" type="string"/>
+        </loadData>
+
+        <createTable tableName="st_symptom_journal">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="st_symptom_journalPK"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="symptom_item" type="VARCHAR(255)"/>
+            <column name="symptom_severity" type="VARCHAR(255)"/>
+            <column name="patient_id" type="VARCHAR(255)"/>
+        </createTable>
+
+        <loadData
+            file="config/liquibase/data/symptomjournal.csv"
+            separator=";"
+            tableName="st_symptom_journal">
+            <column name="id" type="string"/>
+            <column name="symptom_item" type="string"/>
+            <column name="symptom_severity" type="string"/>
+            <column name="patient_id" type="string"/>
+            <column name="comment" type="string"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </loadData>
+
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
