@@ -26,7 +26,7 @@ public class CatalogueItem {
     @Column(name = "tool_tip_link")
     private String toolTipLink;
 
-    @OneToMany(mappedBy = "catalogueItem")
+    @OneToMany(mappedBy = "catalogueItem", cascade=CascadeType.MERGE)
     private List<CatalogueItemSeverity> symptomSeverity;
 
 
@@ -53,8 +53,28 @@ public class CatalogueItem {
         this.catalogueItemCategory = catalogueItemCategory;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getToolTip() {
+        return toolTip;
+    }
+
+    public void setToolTip(String toolTip) {
+        this.toolTip = toolTip;
+    }
+
+    public String getToolTipLink() {
+        return toolTipLink;
+    }
+
+    public void setToolTipLink(String toolTipLink) {
+        this.toolTipLink = toolTipLink;
+    }
+
+    public List<CatalogueItemSeverity> getSymptomSeverity() {
+        return symptomSeverity;
+    }
+
+    public void setSymptomSeverity(List<CatalogueItemSeverity> symptomSeverity) {
+        this.symptomSeverity = symptomSeverity;
     }
 
     @Override

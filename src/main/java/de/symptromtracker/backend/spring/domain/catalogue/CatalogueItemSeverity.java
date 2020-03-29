@@ -10,7 +10,7 @@ public class CatalogueItemSeverity {
     @Column(name = "id")
     private String id = UUID.randomUUID().toString();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false,cascade=CascadeType.MERGE)
     @JoinColumn(name = "catalogue_item_id", referencedColumnName = "id", nullable = false)
     private CatalogueItem catalogueItem;
 
@@ -23,7 +23,7 @@ public class CatalogueItemSeverity {
     public CatalogueItemSeverity() {
     }
 
-    public CatalogueItemSeverity(String id, CatalogueItem catalogueItem, int severityNumericValue, String severityDescription) {
+    public CatalogueItemSeverity(CatalogueItem catalogueItem, int severityNumericValue, String severityDescription) {
         this.id = id;
         this.catalogueItem = catalogueItem;
         this.severityNumericValue = severityNumericValue;
@@ -34,9 +34,6 @@ public class CatalogueItemSeverity {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public CatalogueItem getCatalogueItem() {
         return catalogueItem;

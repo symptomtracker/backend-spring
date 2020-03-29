@@ -4,40 +4,72 @@ import de.symptromtracker.backend.spring.SymptomtrackerbackendspringApp;
 import de.symptromtracker.backend.spring.config.TestSecurityConfiguration;
 import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItem;
 import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItemCategory;
+import de.symptromtracker.backend.spring.domain.catalogue.CatalogueItemSeverity;
+import de.symptromtracker.backend.spring.security.AuthoritiesConstants;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {SymptomtrackerbackendspringApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class CatalogueItemIT {
 
     @Autowired
-    private CatalgoueRepository catalgoueRepository;
+    private CatalogueRepository catalogueRepository;
 
+    private CatalogueItem catalogueItem;
+    private CatalogueItemCategory catalogueItemCategory;
+    List<CatalogueItemSeverity> severityList;
 
-    @Test
-    public void checkDataBase() {
-        Optional<CatalogueItem> catalogueItem = catalgoueRepository.findById("1");
-        List<CatalogueItem> catalogueItemList = catalgoueRepository.findAll();
+    @BeforeEach
+    public void init() {
+        initCatalogueItem();
+        initCatalogueItemCategory();
+        initSeverityList();
+    }
+
+    private void initCatalogueItem() {
+        catalogueItem = new CatalogueItem();
+        catalogueItem.setDescription("Haben Sie Husten?");
+        catalogueItem.setToolTip("Husten ist nicht gut");
+        catalogueItem.setToolTipLink("www.symptomtracker.de");
+    }
+
+    private void initCatalogueItemCategory() {
+        catalogueItemCategory = new CatalogueItemCategory();
+        catalogueItemCategory.setCatalogueItemCategory("LUNGE");
+        catalogueItem.setCatalogueItemCategory(catalogueItemCategory);
+    }
+
+    private void initSeverityList() {
+        severityList = new ArrayList<>();
+        severityList.add(new CatalogueItemSeverity(catalogueItem, 0, "Keine Symptome"));
+        severityList.add(new CatalogueItemSeverity(catalogueItem, 1, "Leichte Symptome"));
+        severityList.add(new CatalogueItemSeverity(catalogueItem, 2, "Mittel Symptome"));
+        severityList.add(new CatalogueItemSeverity(catalogueItem, 3, "Schwere Symptome"));
+        catalogueItem.setSymptomSeverity(severityList);
     }
 
     @Test
-    public void writeToDatabase()
-    {
-        CatalogueItem catalogueItem = new CatalogueItem();
-        catalogueItem.setDescription("HELLO MY NAME IS DR. DRE");
-        CatalogueItemCategory catalogueItemCategory = new CatalogueItemCategory();
-        catalogueItemCategory.setCatalogueItemCategory("HERZ");
-        catalogueItem.setCatalogueItemCategory(catalogueItemCategory);
-        catalgoueRepository.save(catalogueItem);
-        List<CatalogueItem> catalogueItemList = catalgoueRepository.findAll();
-        System.out.println("HELLO");
+    public void checkDataBase() {
+        Optional<CatalogueItem> catalogueItem = catalogueRepository.findById("1");
+        List<CatalogueItem> catalogueItemList = catalogueRepository.findAll();
+        assertThat(catalogueItemList.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void writeToDatabase() {
+        catalogueRepository.save(catalogueItem);
+        List<CatalogueItem> catalogueItemList = catalogueRepository.findAll();
+        assertThat(catalogueItemList.size()).isEqualTo(2);
     }
 
 }
