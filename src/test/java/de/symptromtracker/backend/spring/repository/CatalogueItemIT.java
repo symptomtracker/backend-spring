@@ -72,4 +72,16 @@ public class CatalogueItemIT {
         assertThat(catalogueItemList.size()).isEqualTo(2);
     }
 
+    @Test
+    public void simpleUpdateDatabaseEntry() {
+        String description_change = "LULULU";
+        catalogueRepository.save(catalogueItem);
+        //Getting catalogueitem out of the database
+        CatalogueItem catItem = catalogueRepository.findById(catalogueItem.getId()).get();
+        //modifying the database
+        catItem.setDescription(description_change);
+        //saving it again
+        catalogueRepository.save(catItem);
+        assertThat(catalogueRepository.findById(catalogueItem.getId()).get().getDescription()).isEqualTo(description_change);
+    }
 }
